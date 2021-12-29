@@ -1,0 +1,96 @@
+OpenCV
+- 오픈소스로 제공된 Computer Vision
+ . 상업적 이용에 제한이 없음.
+ . complete open
+- Computer Vision
+ . 작업의 대상: 사진/ 영상/ 비디오
+ . 사진/비디오을 읽고, 사진/비디오을 쓰고
+ . h, w에 대한 처리: 이미지에 대한 크기 조작
+ . c에 대한 처리: 색에 대한 조작
+ . 정지영상 Sequence 처리
+- Computer Vision + alpha (머신러닝)
+ . AE / GenerationModeling
+ . Classification
+ . ObjectDetection
+ . ImageSegmentation
+ . ObjectTracking
+
+ㅇ 작업대상: 정지영상
+- (height x width)개의 화소로 구성된 numpy array
+- 영상의 shape은 (height, width)
+- 컴퓨터에서 다루는 영상은 아날로그가 아닌 디지털
+- 각 영상의 표현은 0 ~ 255의 강도(Intensity)로 표현된 숫자
+- 정수(int)로 표현된 이 숫자는 부호가 없는 양수이다.
+- 이때 적절한 dtype이 unsigned integer 8bit => np.uint8
+- 흑백이미지의 numpy array shape:
+ . (h, w) @OpenCV
+ . (h, w, 1) @keras
+- 컬러이미지의 numpy array shape:
+ . (h, w, c) @OpenCV, keras
+- 컬러인 Red, Green, Blue의 순서
+ . RGB @matplotlib
+ . BGR @OpenCV
+ㅇ 작업대상: 비디오
+- 시간적으로 연속적인 정지영상
+- timestamp를 가지는 정지영상들
+- 정지영상을 잘 다루고
+- 시계열 정보를 잘 다루고 끝.
+
+ㅇ 마우스 이벤트
+cv2.setMouseCallback(WINDOWNAME, MouseEventPrecessFt)
+- WINDOWNAME 이름을 가진 윈도우에서 발생된 마우스 이벤트를 감시
+- 이벤트가 발생하면 발생된 이벤트정보를 MouseEventPrecessFt 전달
+ . MouseEventPrecessFt = on_mouse
+ . 전달되는 정보 (event, x, y, flags, param)
+def MouseEventPrecessFt(event, x, y, flags, param):
+    마우스이벤트 처리
+
+ㅇ 퀴즈
+작성한 이미지의 중심위치에서 반경 240인 원을 그린다.
+원의 내부색은 
+- 파란색과 겹치는 부분은 보라색
+- 녹색과 겹치는 부분은 청록색
+- 빨간색과 겹치는 부분은 노란색
+을 가지도록 설정한다.
+
+ㅇ numpy broadcast의 이해
+
+[25.  0.  0.  0.  0.  0.  0.  0.]
+[[ 81. 724. 864.]
+ [  0.   0.   0.]
+ [  0.   0.   0.]
+ [  0.   0.   0.]
+ [  0.   0.   0.]
+ [  0.   0.   0.]
+ [  0.   0.   0.]
+ [  0.   0.   0.]]
+
+[19.  6.  0.  0.  0.  0.  0.  0.]
+[[ 45. 520. 628.]
+ [ 36. 204. 236.]
+ [  0.   0.   0.]
+ [  0.   0.   0.]
+ [  0.   0.   0.]
+ [  0.   0.   0.]
+ [  0.   0.   0.]
+ [  0.   0.   0.]]
+
+[ 0.  2. 23.  0.  0.  0.  0.  0.]
+[[   0.    0.    0.]
+ [  46.   83.  198.]
+ [ 727. 1284. 2744.]
+ [   0.    0.    0.]
+ [   0.    0.    0.]
+ [   0.    0.    0.]
+ [   0.    0.    0.]
+ [   0.    0.    0.]]
+
+[25.  0.  0.  0.  0.  0.  0.  0.]
+[[ 773. 1367. 2942.]
+ [   0.    0.    0.]
+ [   0.    0.    0.]
+ [   0.    0.    0.]
+ [   0.    0.    0.]
+ [   0.    0.    0.]
+ [   0.    0.    0.]
+ [   0.    0.    0.]]

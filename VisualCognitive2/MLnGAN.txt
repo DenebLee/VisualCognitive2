@@ -1,0 +1,212 @@
+머신러닝
+- shallow 러닝 (...)
+- deep 러닝
+- wide 러닝 (RF, GBM - xgboost, lightGBM, catBoost)
+- sklearn
+
+딥러닝
+- keras / tensorflow
+- pytorch
+
+- torch
+- matlab
+
+tensorflow
+- tensor flow into operation
+- operation transform tensor
+
+binary class인 경우
+p(y=1) = sigmoid(X.w + b)
+Score(y=1) = X.w + b > 0 : y =1
+                     < 0 : y =0
+=> Sigmoid가 하는 일은 Score를 Probability로 변환
+
+범주가 3개면 3개의 score를 이용하여 분류: SVM
+Score(y=0) = X.w0 + b0 = s0
+Score(y=1) = X.w1 + b1 = s1
+Score(y=2) = X.w2 + b2 = s2
+
+yhat = argmax_i Score(y=i)
+p(y=0) = Sigmoid(X.w0 + b0)
+p(y=1) = Sigmoid(X.w1 + b1)
+p(y=2) = Sigmoid(X.w2 + b2)
+
+p(y=0) + p(y=1) + p(y=2) =/= 1
+
+s0, s1, s2 => exp(s0), exp(s1), exp(s2)
+exp(s0) + exp(s1) + exp(s2) + sall
+
+P(y=i) = exp(si) / sall
+p(y=0) + p(y=1) + p(y=2) = 1
+
+s = [s0, s1, s2]
+def softmax(s): return exp(s) / exp(s).sum()
+yhat = softmax(s)
+
+sigmoid:
+1/(1+exp(-x)) = exp(x/2) / (exp(x/2) + exp(-x/2))
+분자분모에 exp(x/2)을 곱하면:
+
+softmax: exp(s0) / (exp(s0) + exp(s1))
+- s0 = x/2
+- s1 = -x/2
+- 따라서, sigmoid는 softmax가 2개의 class일 때의 special case
+
+hi = Fi(h(i-1).Wi + b)
+(b, Hi) == (b, H(i-1)).(Hi, H(i-1)) + (Hi)
+
+
+keras를 이용한 딥러닝 모델 구성:
+1. m = Sequencial(): 비어있는 모델을 생성. 주춧돌을 쌓은것
+- graph, network, model
+2. 모델 m에 add 메소드로 layer를 채운다. 뼈대를 세우고
+   m.add(Layers.Dense(512, activtion='relu', input_dim=(28*28,)))
+   m.add(...)
+   m.add(Layers.Dense(10, activtion='softmax'))
+- h1 = ReLU(X.w1 + b1)
+- yhat = p(y=c) = Softmax(h1.W + b)
+3. 모델 complie: 모델 m에 구조가 정의. 지붕을 얹은 것
+   m.compile(optimzer='adam', metric=['accuracy'],
+             loss='categorical_crossentropy')
+- w업데이트 방법 정의: optimizer를 지정
+- categorical_crossentropy loss를 정의
+- m이 얼마나 좋은 성능을 갖는지 측정할 수 있는 metric 지정
+4. 모델을 학습.
+   h = m.fit(X_tr, y_tr, epochs=100, batch_size=128,
+	     validation_data=(X_te, y_te))
+
+ㅇ 학습 문제에 따른 모델 구성 방법
+- 회귀문제:
+. last layer의 activation: linear 또는 지정하지 않음.
+. metric: 'mae'
+. loss: 'mse'
+- 이항분류(binary classification)
+. last layer의 activation: sigmoid
+. metric: 'accuracy'
+. loss: 'binary_crossentropy'
+- 다항분류(multiclass classfication)
+. last layer의 units을 class의 수
+. last layer의 activation: softmax
+. metric: 'accuracy'
+. loss: 'categorical_crossentropy'
+
+ㅇ 튜닝 포인트
+- learning rate
+- layer를 얼마나 깊게, 넓게
+- epoch
+- 활성화함수
+
+yhat = Linear(X.w + b) : 입력과 출력의 선형관계
+- def Linear(z) : return z
+yhat = F(X.w + b) : 입력과 출력의 비선형관계 매핑
+- F: 비선형함수로서 활성화함수라 부른다.
+
+ㅇ sklearn m의 메소드 vs keras m의 메소드
+- 학습: fit
+- 예측: predict
+- 평가: sklearnM.score, kerasM.evaluate
+
+
+ㅇ overfit vs. underfit
+fit: 모델이 학습데이터로부터 학습하는 과정
+- over: 학습 데이터에만 있는 우연한 노이즈를 학습
+ .데이터에서 노이즈 제거 - x
+ .학습을 중단 / 제한
+ .Epoch 줄인다. - check-pointing, early-stoping
+ .layer를 단순화(얕게, 적은 유닛)
+ .우연한 노이즈가 일시적로만 전달되도록 하는 방법: dropout
+ .미세한 정보 습득을 제한: L1, L2 손실
+ .batch data에 bias 되지 않도록 제한: BatchNormalization
+- under: 학습이 부족한 것
+ .train 정확도는 높은데, 평가 정확도가 않좋다.
+ .train 정확도 조차 않좋다.
+ .Epoch를 늘린다.
+ .layer를 깊고, 넓게
+ .optimizer 변경: adam, rmsprop
+ .data augmentation으로 데이터 증가
+
+ㅇ data augmentation 방법
+- 이미지 변형
+ .회전
+ .반전
+ .확대/축소
+ .색상/명도
+ .노이즈추가
+- 이미지 추출
+ .crop: 일부 이미지 사용
+
+
+ㅇ image classification summary
+객체의 존재유무 식별x, 객체를 분류
+- 학습/테스트 이미지에 객체가 존재
+- 객체가 무엇인지를 추론
+- 이미지 하나에 객체가 하나만 존재
+- 객체가 위치하는 공간이 주어져 있다
+
+실무적/ 상업적으로 유익한가?
+object detection을 위해 필요하다.
+
+ㅇ object detection
+1. 객체가 존재하는가?  => o=object Prob(o=1) = sigmoid(X.w +b)
+ - confidence라고도 부른다.
+2. 객체가 존재하면 어디에 있는가? Prob(o=1) > 0.5
+ - 위치(localization)를 찾는다.  (절대x, 상대o)
+   hat, yhat, what, hhat ~ sigmoid(X.w + b)
+ - 위치(Bounding Box)에 참값으로 학습.
+3. image classification : classes = 10
+ - P(c|o=1) = softmax(X.w + b) : 조건부확률
+ - P(c) = P(c|o=1)xP(o=1) : 실제 class 확률
+4. 출력의 size
+ - 결정포인트: 한장의 이미지에서 최대 몇개의 object를 검출할 것인가
+ - k개 검출하겠다.
+ - k*(1 + 4 + 10)
+5. 평가 metric.
+ - classification : 정확도
+ - BB : IOU
+ - 5개를 예측해서 1개라도 class를 맞추고, 그 IOU > 0.5 : correct
+ - 이 보다 더 정밀한 평가 metric이 있어야 남들보다 성능이 좋다.
+ - 인용하는 metric: mAP(mean Average Precision)
+  . mean: 테스트 data에 대한 평균
+  . (weighted) Average: 5개 예측 순서에 대한 가중평균
+  . precision: 내가 맞다고 주장한 것 중에 실제 맞은 것
+
+
+ㅇ 구글 colab에서 작업 준비사항
+1. 구글 id
+2. id로 접속한 크롬 환경이 준비
+3. 구글 drive에서 Colab Notebooks 폴더에 들어간다.
+4. ObjectDetection 폴더 생성
+5. ObjectDEtection.ipynb를 이 폴더로 이동
+6. linux 명령어의 이해
+ - ls, cp, mv, cd, mkdir, rm, head, ...
+
+
+ㅇ jupyter notebook에서의 특수명령어
+1. 시스템명령어
+ - jupyter notebook이 설치된 os의 명령어를 실행
+ - 실행방법: 느낌표다음에 os 명령어를 사용
+ - 윈도우즈 : !dir 
+ - 리눅스 : !ls
+2. 매직명령어
+ - jupyter notebook에서 제공하는 특수 명령
+ - 운영체제 마다 다른 명령어에 대한 단일 명령 기능 제공
+   . %ls %rm : 리눅스 명령어에 기초하여 제공
+   . %%timeit
+ - 몇가지 python 사용하는데 편리한 기능을 추가
+
+/ObjectDetection/keras-yolo3/yolo3/model.py :
+K.control_flow_ops => tf @line394
+
+====== GAN =========
+진짜같은 가짜를 만드는 것이 목적
+- 합성이미지들이 예술적으로 만들어짐
+- 빈 도화지에서 훈련된 생성자가 이미지를 만든다.
+- 훈련된 판별자가 이미지가 진짜/가짜 분별
+- 생성자와 판별자가 경쟁
+- 생성자 한번 훈련 판별자 판별: 속이는 방향으로 훈련
+- 판별자는 생성자가 생성한 이미지가 가짜라고 판별도록 훈련
+- 판별자가 바보같으면, 생성자가 열심히 훈련을 못해요.
+- 잘 훈련된 GAN 모델에서: 생성자가 승리할 확률이 0.5이 작다.
+
+(z, y=0) - GAN(z) - x' - Disc(x') - P(y=1)
+(x, y=1) - - - - - - - - Disc(x ) - P(y=1)

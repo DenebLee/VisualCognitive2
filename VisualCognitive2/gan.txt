@@ -1,0 +1,44 @@
+o Generating Model
+- 진짜(X)같은 것(X')을 만들어야 한다.
+- 학습데이터(X)에 있는 것과 같아서는 않된다.
+- 확률적 개념
+X ~ z
+X = f(z) = f(z, w) | z = f-1(X, w)
+X = f(z, w) + e    | X' = f(z, w) + e'
+f ~ maximize{P(X|z)}
+
+
+o AutoEncoder(AE)
+입력이미지 -----> 저차원 이미지 -----> 생성이미지
+X.shape (28,23)   z.shape = (2,)   X'.shape (28,28)
+X --- Encoder --->   z  --- Decoder --- X'
+X - Conv(X) - ... - conv(X) - Deconv(z) - ... - X'
+
+AE의 멤버 모델
+- z = encoder(X)
+- X' = decoder(z)
+- X' = model(X) = decoder(encoder(X))
+
+
+o GAN(Generative Adverserial Network)
+- 판별자: 진짜 이미지와 가짜이미지를 분류
+ - 판별자가 생성자보다 훌륭해야 생성자가 훌륭해질 수 있다.
+- 생성자: 가짜 이미지를 생성
+
+                      진짜 이미지(X,  y=1)
+z(랜덤 이미지) -----> 가짜 이미지(X', y=0) -------> 분류
+z ----- generator -----> X'-- discriminator --> P(y=1)
+z - Conv(Z) - ... - Conv   -- Conv(X) ... Conv ... P
+생성자의 학습 파라미터(Wg) |  판별자의 학습 파라미터(Wd)
+X' = generator(z)
+
+학습 2가지 단계:
+- 판별자 먼서 학습 : crossEntropy를 줄여야
+- 생성자 학습(Wd.trainable = False): crossEntropy를 높여야
+
+<학습교재>
+1. https://m.hanbit.co.kr/store/books/book_view.html?p_code=B6417848794
+2. http://book.interpark.com/product/BookDisplay.do?_method=detail&sc.prdNo=303260973&gclid=CjwKCAiA57D_BRAZEiwAZcfCxeoGA9AnYZHXZE4pw0BNKzcI5ulTl-CwLWquZikU_Q1vqPkMyajP7xoCW9YQAvD_BwE
+3. http://www.yes24.com/Product/Goods/65050162
+4. http://book.interpark.com/product/BookDisplay.do?_method=detail&sc.prdNo=303954768&gclid=CjwKCAiA57D_BRAZEiwAZcfCxVUfJNwj_tBuKQpF6xeqfW2bSZDs9zJIeXlNOLClsdLeYTSBbmF2GhoCfJAQAvD_BwE
+5. https://ebook.cne.go.kr/contents/detail?no=PRD000130934
