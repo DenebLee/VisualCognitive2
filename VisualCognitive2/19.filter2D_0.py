@@ -23,6 +23,7 @@ print(kernel)
 # • anchor: 고정점 위치. 기본은 (-1, -1)이며, 필터 중앙을 고정점으로 사용
 # • delta: 추가적으로 더할 값. 기본 0
 # • borderType: 가장자리 픽셀 확장 방식. 기본 BORDER_REFLECT_101
+# • cv2.filter에서의 필수요소 체크확인
 img_filtered = cv.filter2D(img, -1, kernel)
 
 # 원본과 출력 이미지의 모양과 데이터 타입이 같은것을 확인
