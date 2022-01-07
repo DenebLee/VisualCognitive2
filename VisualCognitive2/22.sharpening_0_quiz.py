@@ -1,6 +1,7 @@
 # [Quiz] gaussina bluring에서 sigmaX = sigmaY를 0.1 ~ 4까지 조정하고,
 # - weight를 0.1 ~ 2까지 조정할 때 변화되는 blur 이미지와 sharpened 이미지를
 # - trackbar를 이용하여 그려보자.
+# - 가중치 설정시 주의해야됨 값 누락없이 모든 범위 포함시키도록
 
 import cv2 as cv
 import numpy as np
