@@ -18,5 +18,5 @@ cv.imshow('img', img)
 cv.imshow('edge', edge)
 cv.waitKey()
 
-# [Quiz] 아래 범위에 걸쳐 trackbar를 생성하고 그 결과를 살펴보자.
+
 # thresh1 = [0, 100], thresh2 = [50, 150]
