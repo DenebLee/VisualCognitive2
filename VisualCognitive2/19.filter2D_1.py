@@ -1,11 +1,10 @@
-# sharpening: 이미지에서 중심 픽셀과 주변픽셀과의 차를 두드러지게 나타냄.
+# sharpening: 이미지에서 중심 픽셀과 주변픽셀과의 차를 두드러지게 나타냄
 
 import cv2 as cv
 import numpy as np
 
 img = cv.imread('image/filter_blur.jpg')
 
-# 자신과 주위 픽셀간 차를 증폭. 왜 5를 사용했을까?
 kernel = np.array([[ 0, -1,  0],
                    [-1,  5, -1],
                    [ 0, -1,  0]])
@@ -32,3 +31,5 @@ cv.waitKey()
 #                    [ -1,  5,  -1],
 #                    [ -1, -1,  -1]])
 # - 각각의 이미지 변화 모양에 대해 putText로 그 변화값을 그려본다.
+
+# 답 보지않고 
